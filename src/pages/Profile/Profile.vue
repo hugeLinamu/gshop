@@ -1,30 +1,26 @@
 <template>
     <div>
         <section class="profile">
-            <header class="header">
-                <a class="header_title">
-                    <span class="header_title_text">我的</span>
-                </a>
-            </header>
+            <HeaderTop title="我的"></HeaderTop>
             <section class="profile-number">
-                <a href="javascript:" class="profile-link">
+                <router-link href="javascript:" class="profile-link" :to="userInfo._id? '/userinfo' : '/login'">
                     <!-- 个人图标 -->
                     <div class="profile_image">
                         <i class="iconfont icon-person"></i>
                     </div>
-                    <div class="user-info">
-                        <p class="user-info-top">登录/注册</p>
+                    <div class="user-info"> 
+                        <p class="user-info-top" v-if="!userInfo.phone">{{userInfo.name || '登录/注册'}}</p>
                         <p>
                             <span class="user-icon">
                                 <i class="iconfont icon-shouji icon-mobile"></i>
                             </span>
-                            <span class="icon-mobile-number">暂无绑定手机号</span>
+                            <span class="icon-mobile-number">{{userInfo.phone ||'暂无绑定手机号'}}</span>
                         </p>
                     </div>
                     <span class="arrow">
                         <i class="iconfont icon-jiantou1"></i>
                     </span>
-                </a>
+                </router-link>
             </section>
             <section class="profile_info_data border-1px">
                 <ul class="info_data_list">
@@ -94,15 +90,37 @@
                     </div>
                 </a>
             </section>
+            <section class="profile_my_order border-1px" v-if="userInfo._id">
+              <mt-button class="logout" 
+              type="danger"  
+              @click="logout">退出登陆</mt-button>
+            </section>
         </section>
     </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import { MessageBox} from 'mint-ui'
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue';
 export default {
     name:'Profile',
-   components: { HeaderTop}
+   components: { HeaderTop},
+   methods:{
+    goLogin(){
+      this.$router.push({
+        path:'/login'
+      })
+    },
+    logout(){
+      MessageBox.confirm('确定执行此操作?').then(action => {
+        this.$store.dispatch('logout')
+     })
+    }
+   },
+   computed:{
+      ...mapState(['userInfo'])
+   }
 }
 </script>
 
@@ -148,6 +166,7 @@ export default {
                       font-size 30px
                       vertical-align text-top
                   .icon-mobile-number
+                    margin-left 5px
                     font-size 14px
                     color #fff
               .arrow

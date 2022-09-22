@@ -1,7 +1,7 @@
 import {
     RECEIVE_ADDRESS, RECEIVE_SHOPS, RECEIVE_CATEGORYS,
     RECEIVE_USER_INFO, RESET_USER_INFO, RECEIVE_GOODS,
-    RECEIVE_RATINGS, RECEIVE_INFO , INCREASE ,DECREASE
+    RECEIVE_RATINGS, RECEIVE_INFO , INCREASE ,DECREASE , CLEAR_CART
 } from './mutation-type'
 import Vue from 'vue'
 export default {
@@ -60,8 +60,16 @@ export default {
                 state.cartFoods.splice( state.cartFoods.indexOf(food),1 )
             }
         }
+    },
 
-        
-
+    // 清空购物车
+    [CLEAR_CART]( state ){
+        // 先让购物车里面的food.count 清零,不然购物车的
+        state.cartFoods.forEach(food => {
+            food.count = 0
+        });
+        // 购物车指向空对象
+        state.cartFoods = []
     }
+
 }

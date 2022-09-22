@@ -115,7 +115,7 @@ export default {
     logout(){
       MessageBox.confirm('确定执行此操作?').then(action => {
         this.$store.dispatch('logout')
-     })
+     },()=>{})
     }
    },
    computed:{

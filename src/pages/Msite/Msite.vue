@@ -19,8 +19,9 @@
                     <div class="swiper-slide" v-for="(categoryList, index ) in categorysArr" :key="index">
                         <a href="javascript:" class="link_to_food" v-for="(catagory, index) in categoryList"
                             :key="index">
-                            <div class="food_container">
-                                <img :src='baseURL+catagory.image_url'>
+                            <div class="food_container"> 
+                                <!-- 图片懒加载 -->
+                                <img v-lazy='baseURL+catagory.image_url'>
                             </div>
                             <span>{{catagory.title}}</span>
                         </a>

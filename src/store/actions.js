@@ -1,9 +1,9 @@
 import {
     RECEIVE_ADDRESS, RECEIVE_SHOPS, RECEIVE_CATEGORYS,
     RECEIVE_USER_INFO, RESET_USER_INFO, RECEIVE_INFO,
-    RECEIVE_RATINGS, RECEIVE_GOODS, INCREASE, DECREASE , CLEAR_CART
+    RECEIVE_RATINGS, RECEIVE_GOODS, INCREASE, DECREASE , CLEAR_CART , RECEIVE_SEARCH_SHOPS
 } from './mutation-type'
-import { reqAddress, reqFoodCategorys, reqShops, reqUserInfo, reqLogout, reqShopInfo, reqShopRatings, reqShopGoods } from '../api'
+import { reqAddress, reqFoodCategorys, reqShops, reqUserInfo, reqLogout, reqShopInfo, reqShopRatings, reqShopGoods ,reqSearchShop} from '../api'
 
 export default {
     // 异步获取地址
@@ -93,6 +93,17 @@ export default {
     // 清空购物车
     clearCart({commit}){
         commit(CLEAR_CART)
-    }
+    },
 
+    // 异步获取商家商品列表
+    async searchShops({commit, state}, keyword) {
+
+        const geohash = state.latitude + ',' + state.longitude
+        const result = await reqSearchShop(geohash, keyword)
+        if (result.code === 0) {
+        console.log(result.data);
+        const searchShops = result.data
+        commit(RECEIVE_SEARCH_SHOPS, {searchShops})
+        }
+    },
 }

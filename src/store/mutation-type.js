@@ -10,3 +10,4 @@ export const RECEIVE_INFO = 'receive_info' // 接收商家信息
 export const INCREASE = 'increase'  
 export const DECREASE = 'decrease'  
 export const CLEAR_CART = 'clear_cart'  // 清空购物车
+export const RECEIVE_SEARCH_SHOPS = 'receive_search_shops'    // 搜索后的商家列表

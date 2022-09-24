@@ -27,24 +27,24 @@
             <div class="split"></div>
             <div class="ratingselect">
                 <div class="rating-type border-1px">
-                    <span class="block positive active">
+                    <span class="block positive" @click="setSelectTpye(2)" :class="{ active: selectType === 2 }" >
                         全部<span class="count">{{ratings.length}}</span>
                     </span>
-                    <span class="block positive">
+                    <span class="block positive" @click="setSelectTpye(0)" :class="{ active: selectType === 0 }" >
                         满意<span class="count">{{positiveSize}}</span>
                     </span>
-                    <span class="block negative">
+                    <span class="block negative" @click="setSelectTpye(1)"  :class="{ active: selectType === 1 }">
                         不满意<span class="count">{{ratings.length - positiveSize}}</span>
                     </span>
                 </div>
-                <div class="switch on">
+                <div class="switch " :class="{on :showOnlyText }" @click="toggleOnlyShowText">
                     <span class="iconfont icon-check_circle"></span>
                     <span class="text">只看有内容的评价</span>
                 </div>
             </div>
             <div class="rating-wrapper">
                 <ul>
-                    <li class="rating-item" v-for="(rating, index) in ratings" :key="index">
+                    <li class="rating-item" v-for="(rating, index) in filterRating" :key="index">
                         <div class="avatar">
                             <img width="28" height="28"
                                 :src="rating.avatar">
@@ -60,7 +60,7 @@
                                 <span class="iconfont icon-thumb_up" v-if="rating.recommend"></span>
                                 <span class="item" v-for="(item ,index) in rating.recommend" :key="index">{{item}}</span>
                             </div>
-                            <div class="time">{{rating.rateTime}}</div>
+                            <div class="time">{{rating.rateTime | date-format}}</div>
                         </div>
                     </li>
                 </ul>
@@ -76,6 +76,12 @@ import Star from '../../../components/Star/Star.vue'
 export default {
     components:{ Star },
     name: 'ShopRating',
+    data(){
+        return {
+            showOnlyText:true, // 只显示有文本的
+            selectType: 2 , // 选择的评价类型: 0满意, 1不满意, 2全部
+        }
+    },
     mounted(){
         this.$store.dispatch('getShopRatings' , ()=>{
             this.$nextTick(()=>{
@@ -87,7 +93,24 @@ export default {
     },
     computed:{
         ...mapState(['ratings','info']),
-        ...mapGetters(['positiveSize'])
+        ...mapGetters(['positiveSize']),
+        // 根据全选/ 满意/ 不满意/ 只显示有内容的 进行过滤
+        filterRating(){
+            const { ratings ,selectType , showOnlyText } = this
+            // 过滤产生一个新数组
+          return ratings.filter( rating =>{
+            const { rateType ,text} = rating 
+            return ( selectType===2 || selectType === rateType ) && ( !showOnlyText || text.length>0 )
+          } )
+        }
+    },
+    methods:{
+        setSelectTpye(type){
+            this.selectType = type
+        },
+        toggleOnlyShowText(){
+            this.showOnlyText = !this.showOnlyText
+        }
     }
 }
 </script>

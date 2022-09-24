@@ -1,7 +1,7 @@
 import {
     RECEIVE_ADDRESS, RECEIVE_SHOPS, RECEIVE_CATEGORYS,
     RECEIVE_USER_INFO, RESET_USER_INFO, RECEIVE_GOODS,
-    RECEIVE_RATINGS, RECEIVE_INFO , INCREASE ,DECREASE , CLEAR_CART
+    RECEIVE_RATINGS, RECEIVE_INFO , INCREASE ,DECREASE , CLEAR_CART ,RECEIVE_SEARCH_SHOPS
 } from './mutation-type'
 import Vue from 'vue'
 export default {
@@ -70,6 +70,10 @@ export default {
         });
         // 购物车指向空对象
         state.cartFoods = []
+    },
+    // 搜索商家列表
+    [RECEIVE_SEARCH_SHOPS]( state , {searchShops}  ){
+        state.searchShops = searchShops
     }
 
 }
